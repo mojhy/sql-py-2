@@ -2,10 +2,61 @@
 #imports
 import sqlite3
 
-#constants and varibles
+#constants and varible declaration
 DATABASE = "table2.db"
 
 # functions
+def print_ordered(sql, opin):
+    """prints data in order by id"""
+    order = input('by id \nsmall to big \nbig to small \n')
+    if opin == False:
+        if order == 1:
+            db = sqlite3.connect(DATABASE)
+            cursor = db.cursor()
+            cursor.execute(sql + "order ASC;")
+            results = cursor.fetchall()
+            #loops through all results from smallest to biggest
+            print('N_ID:   Number:  Do i like it?  Unbiased rating? ')
+            for number in results:
+                print(f"     {number[0]:<10}{number[1]:<15}{number[2]:<28} {number[3]}")
+            #end of loop
+        elif order == 2:
+            db = sqlite3.connect(DATABASE)
+            cursor = db.cursor()
+            cursor.execute(sql + "order DESC;")
+            results = cursor.fetchall()
+            #loops through all results from biggest to smallest
+            print('N_ID:   Number:  Do i like it?  Unbiased rating? ')
+            for number in results:
+                print(f"     {number[0]:<10}{number[1]:<15}{number[2]:<28} {number[3]}")
+            #end of loop
+        else:
+            print('that is not an option')
+    else:
+        if order == 1:
+            db = sqlite3.connect(DATABASE)
+            cursor = db.cursor()
+            cursor.execute(sql + "order ASC;")
+            results = cursor.fetchall()
+            #loops through all results from smallest to biggest
+            print('N_ID:   Number:  Unbiased rating? ')
+            for number in results:
+                print(f"     {number[0]:<10}{number[1]:<17} {number[3]}")
+            #end of loop
+        elif order == 2:
+            db = sqlite3.connect(DATABASE)
+            cursor = db.cursor()
+            cursor.execute(sql + "order DESC;")
+            results = cursor.fetchall()
+            #loops through all results from biggest to smallest
+            print('N_ID:   Number:  Unbiased rating? ')
+            for number in results:
+                print(f"     {number[0]:<10}{number[1]:<17} {number[3]}")
+            #end of loop
+        else:
+            print('that is not an option')
+    db.close()
+    
 def print_all():
     """prints all number ratings nicely"""
     db = sqlite3.connect(DATABASE)
@@ -13,11 +64,14 @@ def print_all():
     sql = "select * from number_ratings;"
     cursor.execute(sql)
     results = cursor.fetchall()
-    #loops through all results
-    print('N_ID:   Number:  Do i like it?  Unbiased rating? ')
-    for number in results:
-        print(f"     {number[0]:<10}{number[1]:<15}{number[2]:<28} {number[3]}")
-    #end of loop
+    if input("order? \n y \n n") == 1:
+        print_ordered('select * from number_ratings', False)
+    else:
+        #loops through all results
+        print('N_ID:   Number:  Do i like it?  Unbiased rating? ')
+        for number in results:
+            print(f"     {number[0]:<10}{number[1]:<15}{number[2]:<28} {number[3]}")
+        #end of loop
     db.close()
 
 def print_all_likes():
@@ -27,11 +81,14 @@ def print_all_likes():
     sql = "select * from number_ratings where do_i_like_it = 'y';"
     cursor.execute(sql)
     results = cursor.fetchall()
-    #loops through all results
-    print('N_ID:   Number:  Unbiased rating? ')
-    for number in results:
-        print(f"     {number[0]:<10}{number[1]:<17} {number[3]}")
-    #end of loop
+    if input("order? \n y \n n") == 1:
+        print_ordered("select * from number_ratings where do_i_like_it = 'y'", True)
+    else:
+        #loops through all results
+        print('N_ID:   Number:  Unbiased rating? ')
+        for number in results:
+            print(f"     {number[0]:<10}{number[1]:<17} {number[3]}")
+        #end of loop
     db.close()
 def print_all_dislikes():
     """prints all dislikes"""
@@ -40,11 +97,14 @@ def print_all_dislikes():
     sql = "select * from number_ratings where do_i_like_it = 'n';"
     cursor.execute(sql)
     results = cursor.fetchall()
-    #loops through all results
-    print('N_ID:   Number:  Unbiased rating? ')
-    for number in results:
-        print(f"     {number[0]:<10}{number[1]:<17} {number[3]}")
-    #end of loop
+    if input("order? \n y \n n") == 1:
+        print_ordered("select * from number_ratings where do_i_like_it = 'n'", True)
+    else:
+        #loops through all results
+        print('N_ID:   Number:  Unbiased rating? ')
+        for number in results:
+            print(f"     {number[0]:<10}{number[1]:<17} {number[3]}")
+        #end of loop
     db.close()
 #main code
 
